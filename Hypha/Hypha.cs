@@ -1,14 +1,19 @@
 ﻿using Alta.Api.Client.HighLevel;
 using Alta.Api.DataTransferModels.Models.Responses;
 using Alta.Api.DataTransferModels.Models.Shared;
+using Alta.Api.DataTransferModels.Utility;
 using Alta.Networking;
 using Alta.Utilities;
 using CrossGameplayApi;
 using Hypha.Core;
 using MelonLoader;
 using System;
+using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
+using TriangleNet;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [assembly: MelonInfo(typeof(Hypha.Hypha), "Hypha", "0.0.1", "Hypha Team", null)]
 
@@ -67,7 +72,13 @@ namespace Hypha
         {
             if (IsServerInstance)
             {
-
+                SceneManager.sceneLoaded += (scene, loadMode) =>
+                {
+                    if (scene.name == "Main Menu")
+                    {
+                        StartModdedServer(new ModdedServerAccess(), false, false, 1757, true);
+                    }
+                };
             }
         }
 
@@ -76,13 +87,7 @@ namespace Hypha
             if (GUILayout.Button("Start initial server"))
             {
                 IServerAccess access = new ModdedServerAccess();
-                StartModdedServer(access, false, true, 1757, true);
-            }
-
-            if (GUILayout.Button("Convert instance to server"))
-            {
-                IServerAccess access = new ModdedServerAccess();
-                StartModdedServer(access, false, false, 1757, true);
+                LaunchNewServerInstance(access, false, 1757);
             }
 
             if (GUILayout.Button("Test2"))
@@ -100,6 +105,15 @@ namespace Hypha
         {
             GenericVersionParts genericVersionParts = VersionHelper.Parse(BuildVersion.CurrentVersion.ToString());
             return new GameVersion(genericVersionParts.Stream, genericVersionParts.Season, genericVersionParts.Major, genericVersionParts.Minor, genericVersionParts.ChangeSet);
+        }
+
+        internal void LaunchNewServerInstance(IServerAccess access, bool headless = false, int port = 1757)
+        {
+                ServerSaveUtility serverSaveUtility = new(access);
+                string logPath = Path.Combine(path2: $"{DateTime.Now:yyyy-MM-dd-HH-mm-ss}" + "_headlessServer.txt", path1: serverSaveUtility.LogsPath);
+                string cla = CommandLineArguments.RawCommandLine + " $ServerMode " + " /start_server " + access.ServerInfo.Identifier.ToString() + (headless ? " true " : " false") + port + " /console /access_token " + ApiAccess.ApiClient.UserCredentials.AccessToken.Write() + " /refresh_token " + ApiAccess.ApiClient.UserCredentials.RefreshToken.Write() + " /identity_token " + ApiAccess.ApiClient.UserCredentials.IdentityToken.Write() + " -logFile \"" + logPath + "\"";
+
+                Process.Start(Environment.GetCommandLineArgs()[0], cla);
         }
     }
 }

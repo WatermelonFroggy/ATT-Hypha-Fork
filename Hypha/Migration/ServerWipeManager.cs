@@ -180,7 +180,6 @@ namespace Hypha.Migration
                     await WipeChunk(chunk);
                 }
             }
-            Chunk[] array2 = null;
             WipeOperationsFinished?.Invoke();
         }
 
