@@ -29,19 +29,18 @@ namespace Hypha.Core
 
         public async Task SetOnlinePlayersAsync(IEnumerable<UserInfo> onlinePlayers)
         {
+            // Make it sync
             ServerInfo.OnlinePlayers = onlinePlayers;
         }
 
         public async Task StartAsync(ServerStartArguments startupArgs)
         {
-            // Implement
-            Hypha.Logger.Msg("StartAsync not implemented");
+            Hypha.Logger.Msg("StartAsync should not be ran on a multiplayer server!! We don't rely on Alta's servers and therefore will not launch on them");
         }
 
         public async Task StopAsync(ShutdownReason reason)
         {
-            // Implement
-            Hypha.Logger.Msg("StopAsync not implemented");
+            Hypha.Logger.Msg("StopAsync should not be ran on a multiplayer server!! We don't rely on Alta's servers and therefore will not launch on them");
         }
     }
 }
