@@ -51,11 +51,12 @@ namespace Hypha.Core
             await serverHandler.Bootup();
         }
 
-        private static void StartRejected(string error)
+        // Never used so commenting it out
+/*        private static void StartRejected(string error)
         {
             logger.Warn("Failed to start server: {error}", error);
             currentServer = null;
-        }
+        }*/
 
         private static void ServerEnded(ISocket socket)
         {

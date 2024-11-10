@@ -97,15 +97,15 @@ namespace Hypha.Migration
             socket.ConnectionCreated += ConnectionCreated;
             playerJoinHandler = new ModPlayerConnectionsHandler(this);
             playerJoinHandler.UserPrequisites = new Func<Connection, Task<bool>>(this.UserPrerequisites);
-            playerJoinHandler.UserJoined += this.UserJoined;
-            playerJoinHandler.UserLeft += this.UserLeft;
+            playerJoinHandler.UserJoined += UserJoined;
+            playerJoinHandler.UserLeft += UserLeft;
             if (NetworkSceneManager.Current.HasSaveFiles)
             {
                 ModStreamerManager.Instance.StartAutoSave();
             }
             bootupSteps = new Queue<BootupStep>();
             connectionSteps = new Queue<ConnectionStep>();
-            AddBootupStep(new BootupStep(this.Initialize));
+            AddBootupStep(new BootupStep(Initialize));
             Debug.UpdateLogFolderPath(SaveUtility.LogsPath);
         }
 

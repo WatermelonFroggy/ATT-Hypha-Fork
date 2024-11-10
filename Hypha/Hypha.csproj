@@ -38,8 +38,8 @@
     <Reference Include="Alta.Analytics.Runtime">
       <HintPath>..\..\..\..\..\..\Games\Alta\A Township Tale\A Township Tale_Data\Managed\Alta.Analytics.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="Alta.Api.Client-publicized">
-      <HintPath>..\..\..\..\..\..\Games\Alta\A Township Tale\A Township Tale_Data\Managed\Alta.Api.Client-publicized.dll</HintPath>
+    <Reference Include="Alta.Api.Client_publicized">
+      <HintPath>..\Publicized\Alta.Api.Client_publicized.dll</HintPath>
     </Reference>
     <Reference Include="Alta.Api.DataTransferModels">
       <HintPath>..\..\..\..\..\..\Games\Alta\A Township Tale\A Township Tale_Data\Managed\Alta.Api.DataTransferModels.dll</HintPath>
@@ -154,8 +154,9 @@
     <Reference Include="Pathfinding.Poly2Tri">
       <HintPath>..\..\..\..\..\..\Games\Alta\A Township Tale\A Township Tale_Data\Managed\Pathfinding.Poly2Tri.dll</HintPath>
     </Reference>
-    <Reference Include="Root.Township-publicized">
-      <HintPath>..\..\..\..\..\..\Games\Alta\A Township Tale\A Township Tale_Data\Managed\Root.Township-publicized.dll</HintPath>
+    <Reference Include="Root.Township-publicized, Version=0.0.39.2, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Publicized\Root.Township-publicized.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

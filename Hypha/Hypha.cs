@@ -32,7 +32,7 @@ namespace Hypha
 
         public override void OnApplicationStarted()
         {
-            if (Logger == null) Logger = LoggerInstance;
+            Logger ??= LoggerInstance;
             
             foreach (string parameter in Environment.GetCommandLineArgs())
             {
