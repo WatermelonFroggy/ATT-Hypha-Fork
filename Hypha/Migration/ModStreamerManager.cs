@@ -1,12 +1,9 @@
 ﻿using Alta.Chunks;
-using Alta.Networking.Servers;
 using Alta.Utilities;
 using NLog;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -100,7 +97,7 @@ namespace Hypha.Migration
             else
             {
                 float allowance = Mathf.Max(1f, streamingMillisecondsAllowance - Time.deltaTime * 1000f);
-                Stopwatch stopwatch = new Stopwatch();
+                Stopwatch stopwatch = new();
                 stopwatch.Start();
                 int j;
                 for (int i = 0; i < allChunks.Length; i = j + 1)
@@ -131,7 +128,6 @@ namespace Hypha.Migration
                 {
                     return;
                 }
-                stopwatch = null;
             }
             foreach (IAutoSave autoSave in StreamerManager.AutoSavingBehaviours)
             {

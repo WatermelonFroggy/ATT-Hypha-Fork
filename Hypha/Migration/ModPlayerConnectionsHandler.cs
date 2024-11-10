@@ -1,21 +1,18 @@
-﻿using Alta.Api.DataTransferModels.Models.Responses;
-using Alta.Api.DataTransferModels.Models.Shared;
+﻿using Alta.Api.DataTransferModels.Converters;
+using Alta.Api.DataTransferModels.Models.Responses;
 using Alta.Api.DataTransferModels.Utility;
-using Alta.Networking.Servers;
 using Alta.Networking;
+using Alta.Networking.Scripts.Player;
+using Alta.Networking.Servers;
+using Alta.Serialization;
+using Alta.Utilities;
 using NLog;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Alta.Serialization;
-using Alta.Api.DataTransferModels.Converters;
-using Alta.Utilities;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
-using Alta.Networking.Scripts.Player;
+using System.Threading.Tasks;
 
 namespace Hypha.Migration
 {
@@ -29,27 +26,31 @@ namespace Hypha.Migration
 
             private PlayerJoinResult(UserInfoAndRole userInfo)
             {
-                this = default(PlayerJoinResult);
+                this = default;
                 UserInfo = userInfo;
             }
 
             private PlayerJoinResult(string error)
             {
-                this = default(PlayerJoinResult);
+                this = default;
                 Error = error;
             }
 
             public static PlayerJoinResult CreateSuccessResult(UserInfoAndRole userInfo)
             {
-                PlayerJoinResult result = new PlayerJoinResult(userInfo);
-                result.IsSuccessful = true;
+                PlayerJoinResult result = new(userInfo)
+                {
+                    IsSuccessful = true
+                };
                 return result;
             }
 
             public static PlayerJoinResult CreateDeniedResult(string error)
             {
-                PlayerJoinResult result = new PlayerJoinResult(error);
-                result.IsSuccessful = false;
+                PlayerJoinResult result = new(error)
+                {
+                    IsSuccessful = false
+                };
                 return result;
             }
         }
@@ -95,10 +96,10 @@ namespace Hypha.Migration
             }
             int playerId = Hypha.StaticJoinMessage.PlayerId;
             logger.Info("Received Join request from player: {0}", playerId);
-            PlayerJoinResult playerJoinResult = default(PlayerJoinResult);
+            PlayerJoinResult playerJoinResult = default;
             if (server.ServerLocks.Count > 0)
             {
-                ServerJoinLock serverJoinLock = default(ServerJoinLock);
+                ServerJoinLock serverJoinLock = default;
                 foreach (ServerJoinLock serverLock in server.ServerLocks)
                 {
                     if (serverLock.level > serverJoinLock.level)
@@ -180,7 +181,7 @@ namespace Hypha.Migration
                 {
                     return PlayerJoinResult.CreateDeniedResult("Token was for a different user: " + num);
                 }
-                UserInfoAndRole userInfoAndRole = new UserInfoAndRole(new UserInfo(num, value), UserRolesUtility.GetRolesFromIdentityToken(tokenString));
+                UserInfoAndRole userInfoAndRole = new(new UserInfo(num, value), UserRolesUtility.GetRolesFromIdentityToken(tokenString));
                 if (jwtSecurityToken.Claims.Any((Claim claim) => claim.Type == "Policy" && claim.Value == "dev"))
                 {
                     logger.Warn("Skipping allowed check for dev join token");

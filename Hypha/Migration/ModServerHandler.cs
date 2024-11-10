@@ -1,6 +1,5 @@
 ﻿using Alta.Api.Client.HighLevel;
 using Alta.Api.DataTransferModels.Models.Responses;
-using Alta.Api.DataTransferModels.Models.Shared;
 using Alta.Console;
 using Alta.Networking;
 using Alta.Networking.Servers;
@@ -12,8 +11,6 @@ using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -55,8 +52,8 @@ namespace Hypha.Migration
 
         private ServerHeartbeat heartbeat;
         private WebServerThread webServer;
-        private Dictionary<Connection, PlayerMode> playerModes = new Dictionary<Connection, PlayerMode>();
-        private Dictionary<Connection, PlatformTarget> platformTargets = new Dictionary<Connection, PlatformTarget>();
+        private Dictionary<Connection, PlayerMode> playerModes = new();
+        private Dictionary<Connection, PlatformTarget> platformTargets = new();
         private bool isRunningLocally;
         private string status;
 
@@ -95,8 +92,10 @@ namespace Hypha.Migration
 
             CacheManager.Instance = new ServerCacheManager();
             socket.ConnectionCreated += ConnectionCreated;
-            playerJoinHandler = new ModPlayerConnectionsHandler(this);
-            playerJoinHandler.UserPrequisites = new Func<Connection, Task<bool>>(this.UserPrerequisites);
+            playerJoinHandler = new ModPlayerConnectionsHandler(this)
+            {
+                UserPrequisites = new Func<Connection, Task<bool>>(this.UserPrerequisites)
+            };
             playerJoinHandler.UserJoined += UserJoined;
             playerJoinHandler.UserLeft += UserLeft;
             if (NetworkSceneManager.Current.HasSaveFiles)
@@ -154,7 +153,7 @@ namespace Hypha.Migration
 
         public async void CheckForNoResponseFromConnectionAsync(Connection connection)
         {
-            CancellationTokenSource source = new CancellationTokenSource();
+            CancellationTokenSource source = new();
             connection.Disconnected += CancelWait;
             try
             {
@@ -213,7 +212,7 @@ namespace Hypha.Migration
         public async Task Initialize(Action<string> progress)
         {
             progress("Initializing Server");
-            ServerStartArguments startupArgs = new ServerStartArguments
+            ServerStartArguments startupArgs = new()
             {
                 IsRunningLocally = false,
                 Version = Hypha.LatestVersion()
@@ -441,7 +440,7 @@ namespace Hypha.Migration
 
         public async Task<bool> UserPrerequisites(Connection connection)
         {
-            TaskCompletionSource<bool> prerequisitesCheck = new TaskCompletionSource<bool>();
+            TaskCompletionSource<bool> prerequisitesCheck = new();
             logger.Info("Checking user prerequisites on connection {0}: {1}", connection.Identifier, connection.UserInfo);
             if (bootupSteps != null)
             {

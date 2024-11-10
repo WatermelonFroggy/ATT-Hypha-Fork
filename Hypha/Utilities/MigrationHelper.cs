@@ -1,33 +1,14 @@
-﻿using Alta.Networking;
+﻿using Alta.Chunks;
+using Alta.Networking;
+using Alta.Networking.Servers;
+using Alta.Utilities;
+using HarmonyLib;
 using Hypha.Migration;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using HarmonyLib;
-using Alta.Networking.Servers;
-using Alta.Chunks;
-using Alta.Utilities;
-using System.Runtime.Remoting.Messaging;
 
 namespace Hypha.Utilities
 {
-    /*    [HarmonyPatch(typeof(NetworkScene), nameof(NetworkScene.Awake))]
-        public static class NetworkSceneReplacer
-        {
-            public static bool Prefix(NetworkScene __instance)
-            {
-                NetworkSceneManager.Current = __instance.gameObject.AddComponent<ModNetworkScene>();
-                NetworkSceneManager.CurrentInternal = (ModNetworkScene)NetworkSceneManager.Current;
-                UnityEngine.Object.Destroy(__instance);
-
-                Hypha.Logger.Msg(ConsoleColor.Blue, "Successfully swapped out NetworkScene for ModNetworkScene :)");
-                return false;
-            }
-        }*/
-
     [HarmonyPatch(typeof(NetworkScene), nameof(NetworkScene.InitializeAsServer))]
     public static class NetworkManagerFiller
     {
@@ -54,7 +35,7 @@ namespace Hypha.Utilities
 
             __instance.entityManager.InitializeAsServer(__instance.embeddedEntities);
             __instance.entityManager.ChunkEmbedded(__instance.embeddedEntities);
-            
+
             GarbageCollectTimer garbageTimer = __instance.GetComponent<GarbageCollectTimer>();
             if (garbageTimer != null) garbageTimer.enabled = true;
             NetworkScene.sceneLogger.Info("TEMP pre server started");

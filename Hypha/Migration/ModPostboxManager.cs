@@ -1,10 +1,7 @@
 ﻿using Alta.Inventory;
 using Alta.Networking;
 using NLog;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -38,8 +35,7 @@ namespace Hypha.Migration
 
         public void TradeWipe(int playerIdentifier, int coinCount, NetworkEntity dockedItem)
         {
-            TradeVendorData tradeVendorData;
-            if (!wipeData.TryGetValue(playerIdentifier, out tradeVendorData))
+            if (!wipeData.TryGetValue(playerIdentifier, out TradeVendorData tradeVendorData))
             {
                 tradeVendorData = new TradeVendorData();
                 wipeData[playerIdentifier] = tradeVendorData;
@@ -90,14 +86,12 @@ namespace Hypha.Migration
                         NetworkSceneManager.Current.Spawner.Spawn(CommonPrefabs.CoinPrefab).CommonPickup.DockInto(null, componentInChildren, CoinCount, true);
                         yield return SerializedSavedDynamicObject.GetSaveOf(pouch.Prefab);
                         pouch.SceneDestroy();
-                        pouch = null;
                     }
                     else if (CoinCount == 1)
                     {
                         NetworkEntity pouch = NetworkSceneManager.Current.Spawner.Spawn(CommonPrefabs.CoinPrefab);
                         yield return SerializedSavedDynamicObject.GetSaveOf(pouch.Prefab);
                         pouch.SceneDestroy();
-                        pouch = null;
                     }
                     foreach (SerializedSavedDynamicObject serializedSavedDynamicObject in items)
                     {
@@ -124,7 +118,7 @@ namespace Hypha.Migration
                 }
             }
 
-            private List<SerializedSavedDynamicObject> items = new List<SerializedSavedDynamicObject>();
+            private List<SerializedSavedDynamicObject> items = new();
         }
     }
 }

@@ -1,24 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using Alta.Api.Client.HighLevel;
+﻿using Alta.Api.Client.HighLevel;
 using Alta.Api.DataTransferModels.Models.Responses;
 using Alta.Api.DataTransferModels.Models.Shared;
+using Alta.Networking;
 using Alta.Utilities;
 using CrossGameplayApi;
 using Hypha.Core;
-using Hypha.Utilities;
 using MelonLoader;
+using System;
+using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using HarmonyLib;
-using Alta.Networking;
-using Alta.Networking.Servers;
 
-[assembly:MelonInfo(typeof(Hypha.Hypha), "Hypha", "0.0.1", "Hypha Team", null)]
+[assembly: MelonInfo(typeof(Hypha.Hypha), "Hypha", "0.0.1", "Hypha Team", null)]
 
 namespace Hypha
 {
@@ -33,7 +25,7 @@ namespace Hypha
         public override void OnApplicationStarted()
         {
             Logger ??= LoggerInstance;
-            
+
             foreach (string parameter in Environment.GetCommandLineArgs())
             {
                 if (parameter == "$ServerMode")
@@ -95,7 +87,7 @@ namespace Hypha
 
             if (GUILayout.Button("Test2"))
             {
-               VrMainMenu.Instance.JoinServer(ModdedServerInfo);
+                VrMainMenu.Instance.JoinServer(ModdedServerInfo);
             }
         }
 

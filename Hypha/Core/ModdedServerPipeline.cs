@@ -1,13 +1,9 @@
 ﻿using Alta.Api.Client.HighLevel;
 using Alta.Api.DataTransferModels.Models.Responses;
-using Alta.Networking.Servers;
 using Alta.Networking;
+using Hypha.Migration;
 using NLog;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Hypha.Migration;
 using System.Threading.Tasks;
 
 namespace Hypha.Core
@@ -45,18 +41,18 @@ namespace Hypha.Core
             currentServer = serverAccess.ServerInfo;
             GlobalDiagnosticsContext.Set("server_id", currentServer.Name);
             NetworkSceneManager.IsServer = true;
-            ModServerHandler serverHandler = new (serverSocket, serverAccess, isRunningLocally);
+            ModServerHandler serverHandler = new(serverSocket, serverAccess, isRunningLocally);
             INetworkSceneInternal scene = (INetworkSceneInternal)NetworkSceneManager.Current;
             serverHandler.AddBootupStep((Action<string> setStatus) => scene.Initialize(serverSocket, setStatus));
             await serverHandler.Bootup();
         }
 
         // Never used so commenting it out
-/*        private static void StartRejected(string error)
-        {
-            logger.Warn("Failed to start server: {error}", error);
-            currentServer = null;
-        }*/
+        /*        private static void StartRejected(string error)
+                {
+                    logger.Warn("Failed to start server: {error}", error);
+                    currentServer = null;
+                }*/
 
         private static void ServerEnded(ISocket socket)
         {

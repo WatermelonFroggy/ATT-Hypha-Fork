@@ -1,11 +1,7 @@
 ﻿using Alta.Networking;
 using Alta.Networking.Scripts.Player;
-using Alta.Networking.Servers;
 using Alta.Utilities;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Hypha.Migration
@@ -31,7 +27,7 @@ namespace Hypha.Migration
             ModServerHandler.Current.PlayerJoined += PlayerJoined;
             if (currentPlayer == null)
             {
-                foreach (Player player in Player.AllPlayers)
+                foreach (Player player in Player.AllPlayers.Cast<Player>())
                 {
                     if (player.UserInfo.Identifier == playerIdentifier)
                     {

@@ -1,17 +1,12 @@
 ﻿using Alta.Api.Client.HighLevel;
 using Alta.Api.DataTransferModels.Models.Responses;
 using Alta.Api.DataTransferModels.Utility;
-using Alta.Networking.Servers;
 using Alta.Utilities;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using static AltaMenuItemBase.Assets.Create;
 
 namespace Hypha.Core
 {
@@ -102,7 +97,7 @@ namespace Hypha.Core
 
         private void StartExternalServer()
         {
-            ServerSaveUtility serverSaveUtility = new ServerSaveUtility(server);
+            ServerSaveUtility serverSaveUtility = new(server);
             string text = Path.Combine(path2: $"{DateTime.Now:yyyy-MM-dd-HH-mm-ss}" + "_headlessServer.txt", path1: serverSaveUtility.LogsPath);
             string text2 = CommandLineArguments.RawCommandLine + " $ServerMode " + " /start_server " + server.ServerInfo.Identifier.ToString() + (isHeadless ? " true " : " false") + port + " /console /access_token " + ApiAccess.ApiClient.UserCredentials.AccessToken.Write() + " /refresh_token " + ApiAccess.ApiClient.UserCredentials.RefreshToken.Write() + " /identity_token " + ApiAccess.ApiClient.UserCredentials.IdentityToken.Write() + " -logFile \"" + text + "\"";
             logger.Debug(text2);

@@ -4,8 +4,6 @@ using Alta.Utilities;
 using NLog;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Hypha.Migration
@@ -13,8 +11,8 @@ namespace Hypha.Migration
     public class ModPerPlayerManager<TThis, TContent, TSaveFormat> : NetworkEntityBehaviour, IAutoSave where TThis : ModPerPlayerManager<TThis, TContent, TSaveFormat> where TContent : class, IPerPlayerContent<TSaveFormat>, new() where TSaveFormat : IAltaFileFormat, new()
     {
         public static TThis Instance { get; set; }
-        public Dictionary<int, TContent> contents = new Dictionary<int, TContent>();
-        public Dictionary<int, Task> getContentTasks = new Dictionary<int, Task>();
+        public Dictionary<int, TContent> contents = new();
+        public Dictionary<int, Task> getContentTasks = new();
         public static Logger logger = LogManager.GetCurrentClassLogger();
 
 
@@ -53,16 +51,14 @@ namespace Hypha.Migration
 
         public async Task<TContent> GetContentAsync(int playerIdentifier, Player player = null, bool isCreatingNew = true)
         {
-            Task task;
-            if (getContentTasks.TryGetValue(playerIdentifier, out task))
+            if (getContentTasks.TryGetValue(playerIdentifier, out Task task))
             {
                 await task;
             }
-            TContent content;
-            if (!contents.TryGetValue(playerIdentifier, out content) && isCreatingNew)
+            if (!contents.TryGetValue(playerIdentifier, out TContent content) && isCreatingNew)
             {
                 content = new TContent();
-                TaskCompletionSource<bool> readTask = new TaskCompletionSource<bool>();
+                TaskCompletionSource<bool> readTask = new();
                 getContentTasks.Add(playerIdentifier, readTask.Task);
                 try
                 {

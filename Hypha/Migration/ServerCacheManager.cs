@@ -1,5 +1,4 @@
 ﻿using Alta.Networking;
-using Alta.Networking.Servers;
 using Alta.Serialization;
 using Alta.Static;
 using Alta.Utilities;
@@ -8,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Hypha.Migration
@@ -16,20 +14,18 @@ namespace Hypha.Migration
     public class ServerCacheManager : CacheManager
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
-        private Dictionary<string, Task> generating = new Dictionary<string, Task>();
+        private Dictionary<string, Task> generating = new();
 
-        private Dictionary<Connection, Queue<ValueTuple<string, uint>>> requestedFiles = new Dictionary<Connection, Queue<ValueTuple<string, uint>>>();
-        private Dictionary<Connection, Dictionary<string, TaskCompletionSource<bool>>> serverChecks = new Dictionary<Connection, Dictionary<string, TaskCompletionSource<bool>>>();
+        private Dictionary<Connection, Queue<ValueTuple<string, uint>>> requestedFiles = new();
+        private Dictionary<Connection, Dictionary<string, TaskCompletionSource<bool>>> serverChecks = new();
 
         public override async Task CleanCache(string name)
         {
-            Task task;
-            if (generating.TryGetValue(name, out task))
+            if (generating.TryGetValue(name, out Task task))
             {
                 await task;
             }
-            IAltaFile altaFile;
-            if (ModServerHandler.Current.SaveUtility.CacheFolder.FileExists(name, out altaFile))
+            if (ModServerHandler.Current.SaveUtility.CacheFolder.FileExists(name, out IAltaFile altaFile))
             {
                 await altaFile.DeleteAsync(false);
             }
@@ -37,15 +33,13 @@ namespace Hypha.Migration
 
         public override async Task<T> GetCache<T>(string name, Func<Task<T>> generate, Func<T> createEmpty)
         {
-            Task task;
-            if (generating.TryGetValue(name, out task)) await task;
-            IAltaFile file;
+            if (generating.TryGetValue(name, out Task task)) await task;
             T t2;
 
-            if (ModServerHandler.Current.SaveUtility.CacheFolder.FileExists(name, out file))
+            if (ModServerHandler.Current.SaveUtility.CacheFolder.FileExists(name, out IAltaFile file))
             {
                 Stopwatch timer = Stopwatch.StartNew();
-                T t = await(await file.ReadAsync<CacheFileFormat>()).ReadAsAsync<T>(createEmpty());
+                T t = await (await file.ReadAsync<CacheFileFormat>()).ReadAsAsync<T>(createEmpty());
                 file.QueueUnload();
                 logger.Info(string.Format("Loading cache {0} took {1}ms", name, timer.Elapsed.TotalMilliseconds));
                 t2 = t;
@@ -58,7 +52,7 @@ namespace Hypha.Migration
                 generating.Add(name, task2);
                 T t3 = await task2;
                 file = ModServerHandler.Current.SaveUtility.CacheFolder.GetFile(name);
-                CacheFileFormat cacheFileFormat = new CacheFileFormat();
+                CacheFileFormat cacheFileFormat = new();
                 cacheFileFormat.Write(t3);
                 file.Content = cacheFileFormat;
                 file.WriteAsync();
