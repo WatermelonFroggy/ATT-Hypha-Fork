@@ -28,9 +28,6 @@ namespace Hypha
         internal static MelonLogger.Instance Logger { get; private set; }
         public static GameServerInfo ModdedServerInfo { get; internal set; }
         public static RequestJoinMessage StaticJoinMessage { get; internal set; }
-        
-        [Obsolete("Don't use this if you're trying to. It's just to fix ServerHandler related references")]
-        internal static ServerHandler serverHandlerFix;
 
 
         public override void OnApplicationStarted()
