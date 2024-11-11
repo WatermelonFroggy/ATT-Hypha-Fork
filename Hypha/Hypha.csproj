@@ -142,6 +142,10 @@
       <HintPath>..\..\..\..\..\..\Games\Alta\A Township Tale\MelonLoader\MelonLoader.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.IdentityModel.Tokens, Version=6.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    <Reference Include="Newtonsoft.Json, Version=13.0.1.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Games\Alta\A Township Tale\A Township Tale_Data\Managed\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="NLog-publicized">
       <HintPath>..\Publicized\NLog-publicized.dll</HintPath>
     </Reference>
@@ -278,6 +282,7 @@
     <Compile Include="Core\ModdedServerAccess.cs" />
     <Compile Include="Core\ModdedServerGamemode.cs" />
     <Compile Include="Core\ModdedServerPipeline.cs" />
+    <Compile Include="Core\ModdedServerInfo.cs" />
     <Compile Include="Core\ModSpawnManager.cs" />
     <Compile Include="Hypha.cs" />
     <Compile Include="Migration\ModPerPlayerContent.cs" />

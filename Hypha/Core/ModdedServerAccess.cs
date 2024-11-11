@@ -10,7 +10,7 @@ namespace Hypha.Core
 {
     internal class ModdedServerAccess : IServerAccess
     {
-        public GameServerInfo ServerInfo => Hypha.ModdedServerInfo;
+        public GameServerInfo ServerInfo => Hypha.ServerToHost;
 
         public bool IsActive { get; set; }
 

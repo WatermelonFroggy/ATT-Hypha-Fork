@@ -24,7 +24,7 @@ namespace Hypha.Migration
         public ServerSaveUtility SaveUtility { get; private set; }
         public new SettingsFileAccess<ServerSettings> ServerConfig { get; private set; }
 
-        public GameServerInfo ServerInfo => Hypha.ModdedServerInfo;
+        public GameServerInfo ServerInfo => Hypha.ServerToHost;
 
         public ServerConfiguration Config { get; private set; }
         public bool IsUsingConfig => Config != null;
@@ -42,7 +42,7 @@ namespace Hypha.Migration
         public event Action BootupFinished;
         private event Action BootupProgressed;
 
-        public int PlayerLimit => Hypha.ModdedServerInfo.PlayerLimit.Value;
+        public int PlayerLimit => Hypha.ServerToHost.PlayerLimit.Value;
 
 
         private static Logger logger = LogManager.GetCurrentClassLogger();

@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using Alta.Api.DataTransferModels.Models.Responses;
+using HarmonyLib;
 using MelonLoader;
 using NLog;
 using NLog.Internal;
