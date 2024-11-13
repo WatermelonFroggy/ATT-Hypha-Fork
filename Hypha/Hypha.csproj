@@ -113,8 +113,8 @@
     <Reference Include="Alta.Timing.Runtime">
       <HintPath>..\..\..\..\..\..\Games\Alta\A Township Tale\A Township Tale_Data\Managed\Alta.Timing.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="Alta.Values">
-      <HintPath>..\..\..\..\..\..\Games\Alta\A Township Tale\A Township Tale_Data\Managed\Alta.Values.dll</HintPath>
+    <Reference Include="Alta.Values-publicized">
+      <HintPath>..\Publicized\Alta.Values-publicized.dll</HintPath>
     </Reference>
     <Reference Include="Alta.VContainerLayer.Runtime">
       <HintPath>..\..\..\..\..\..\Games\Alta\A Township Tale\A Township Tale_Data\Managed\Alta.VContainerLayer.Runtime.dll</HintPath>
@@ -284,9 +284,10 @@
     <Compile Include="Core\ModdedServerPipeline.cs" />
     <Compile Include="Core\ModdedServerInfo.cs" />
     <Compile Include="Core\ModSpawnManager.cs" />
+    <Compile Include="Helpers\ItemAPI.cs" />
     <Compile Include="Hypha.cs" />
     <Compile Include="Migration\ModPerPlayerContent.cs" />
-    <Compile Include="Migration\ModPerPlayerManager.cs" />
+    <Compile Include="Utilities\ModPerPlayerManager.cs" />
     <Compile Include="Migration\ModPlayerConnectionsHandler.cs" />
     <Compile Include="Migration\ModPostboxManager.cs" />
     <Compile Include="Migration\ModServerHandler.cs" />

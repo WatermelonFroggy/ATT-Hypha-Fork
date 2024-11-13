@@ -177,11 +177,14 @@ namespace Hypha.Migration
                 JwtSecurityToken jwtSecurityToken = JWTUtility.CreateFromString(tokenString, includeRawData: true);
                 int num = int.Parse(jwtSecurityToken.Claims.FirstOrDefault((Claim claim) => claim.Type == "UserId").Value);
                 string value = jwtSecurityToken.Claims.FirstOrDefault((Claim claim) => claim.Type == "Username").Value;
+
                 if (num != playerId)
                 {
                     return PlayerJoinResult.CreateDeniedResult("Token was for a different user: " + num);
                 }
                 UserInfoAndRole userInfoAndRole = new(new UserInfo(num, value), UserRolesUtility.GetRolesFromIdentityToken(tokenString));
+                return PlayerJoinResult.CreateSuccessResult(userInfoAndRole); // Just let everyone in for now. People can blacklist if they want to
+
                 if (jwtSecurityToken.Claims.Any((Claim claim) => claim.Type == "Policy" && claim.Value == "dev"))
                 {
                     logger.Warn("Skipping allowed check for dev join token");

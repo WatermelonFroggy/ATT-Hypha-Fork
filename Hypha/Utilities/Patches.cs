@@ -1,11 +1,16 @@
-﻿using Alta.Api.DataTransferModels.Models.Responses;
+﻿using Alta.Api.DataTransferModels.Models.Requests;
+using Alta.Api.DataTransferModels.Models.Responses;
+using Alta.Networking;
 using HarmonyLib;
+using Hypha.Core;
 using MelonLoader;
 using NLog;
 using NLog.Internal;
+using Steamworks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -81,5 +86,45 @@ namespace Hypha.Utilities
                 Hypha.Logger.Warning("NLOG TRACE: " + logEvent.FormattedMessage);
             }
         }
+    }
+
+
+    [HarmonyPatch(typeof(GameServerInfoExtensions), nameof(GameServerInfoExtensions.JoinServerAsync))]
+    public static class JoinServerFix
+    {
+        public static bool Prefix(GameServerInfo gameServer, ref Task<ServerJoinResult> __result)
+        {
+            if (gameServer is ModdedServerInfo)
+            {
+                GameServerInfoExtensions.logger.Debug("Joining modded server, skipping API check");
+
+                __result = JoinResultForModdedServer(gameServer as ModdedServerInfo);
+
+                return false;
+            }
+
+            return true;
+        }
+
+        internal static async Task<ServerJoinResult> JoinResultForModdedServer(ModdedServerInfo gameServer)
+        {
+            ServerJoinResult newResult = new()
+            {
+                IsAllowed = true,
+                ConnectionInfo = new()
+                {
+                    Address = IPAddress.Parse(gameServer.IP),
+                    GamePort = gameServer.Port
+                }
+            };
+
+            return newResult;
+        }
+    }
+
+    [HarmonyPatch(typeof(PrefabManager), nameof(PrefabManager.PrepareSpawnSetups))]
+    public static class PrefabWarmupEvent
+    {
+        public static void Postfix() => Hypha.InvokePrefabWarmup();
     }
 }
