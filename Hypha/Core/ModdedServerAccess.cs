@@ -24,7 +24,7 @@ namespace Hypha.Core
         public async Task Ping()
         {
             // Implement
-            Hypha.Logger.Msg("Ping not implemented");
+            // Hypha.Logger.Msg("Ping not implemented");
         }
 
         public async Task SetOnlinePlayersAsync(IEnumerable<UserInfo> onlinePlayers)

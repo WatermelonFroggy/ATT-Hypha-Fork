@@ -1,6 +1,8 @@
 ﻿using Alta.Api.Client.HighLevel;
 using Alta.Api.DataTransferModels.Models.Responses;
 using Alta.Api.DataTransferModels.Models.Shared;
+using Alta.Character;
+using Alta.Chunks;
 using Alta.Networking;
 using Alta.Utilities;
 using CrossGameplayApi;
@@ -120,7 +122,7 @@ namespace Hypha
             if (GUILayout.Button("Start initial server"))
             {
                 IServerAccess access = new ModdedServerAccess();
-                LaunchNewServerInstance(access, false, 1757);
+                LaunchNewServerInstance(access, true, 1757);
             }
 
             if (GUILayout.Button("Test2"))
@@ -138,7 +140,13 @@ namespace Hypha
 
             if (GUILayout.Button("Spawn cube"))
             {
-                SpawnHelper.Spawn(uint.Parse(hashToSpawn), SpawnData.DontGenerate, GameObject.FindObjectOfType<Player>().Chunk, GameObject.FindObjectOfType<Player>().transform.position);
+                PlayerController player = GameObject.FindObjectOfType<PlayerCharacter>();
+                if (player == null)
+                {
+                    Application.Quit();
+                }
+                Vector3 pos = player.PlayerFeetPosition + Vector3.up;
+                SpawnHelper.Spawn(quickItem.Prefab, SpawnData.Default, null, pos, Quaternion.identity);
             }
         }
 
@@ -180,7 +188,7 @@ namespace Hypha
 
 
         // https://stackoverflow.com/a/21771432
-        public static async Task<IPAddress?> GetExternalIpAddress()
+        public static async Task<IPAddress> GetExternalIpAddress()
         {
             string externalIP = (await new HttpClient().GetStringAsync("http://icanhazip.com")).Replace("\\r\\n", "").Replace("\\n", "").Trim();
             if (!IPAddress.TryParse(externalIP, out var ipAddress)) return null;
