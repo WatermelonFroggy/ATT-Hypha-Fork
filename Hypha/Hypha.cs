@@ -40,7 +40,18 @@ namespace Hypha
 
         internal AssetBundle hyphaExampleBundle;
         internal string hashToSpawn;
+        internal string spawnPos;
         internal Alta.Inventory.Item quickItem;
+
+        public Vector3 getVector3(string rString)
+        {
+            string[] temp = rString.Substring(1, rString.Length - 2).Split(',');
+            float x = float.Parse(temp[0]);
+            float y = float.Parse(temp[1]);
+            float z = float.Parse(temp[2]);
+            Vector3 rValue = new Vector3(x, y, z);
+            return rValue;
+        }
 
 
         public override async void OnApplicationStarted()
@@ -100,8 +111,8 @@ namespace Hypha
             {
                 if (hyphaExampleBundle == null)
                 {
-                    hyphaExampleBundle = AssetBundle.LoadFromFile(Path.Combine(RootDirectory, "Plugins", "hypha_example"));
-                    GameObject cubeItem = hyphaExampleBundle.LoadAsset<GameObject>("CubeItem");
+                    hyphaExampleBundle = AssetBundle.LoadFromFile(Path.Combine(RootDirectory, "Plugin-Resources/Hypha/example", "hypha_example"));
+                    GameObject cubeItem = hyphaExampleBundle.LoadAsset<GameObject>("cubeitem");
                     quickItem = ItemAPI.CreateItem(cubeItem.GetComponent<NetworkPrefab>(), "Cube Item", "Does coems", ItemAPI.ItemRarity.Legendary, 5f);
                     PrefabManager.AddToPrefabMap(new NetworkPrefab[] { cubeItem.GetComponent<NetworkPrefab>() });
                 }
@@ -138,6 +149,8 @@ namespace Hypha
 
             hashToSpawn = GUILayout.TextField(hashToSpawn);
 
+            spawnPos = GUILayout.TextField(spawnPos);
+
             if (GUILayout.Button("Spawn cube"))
             {
                 PlayerController player = GameObject.FindObjectOfType<PlayerCharacter>();
@@ -145,7 +158,7 @@ namespace Hypha
                 {
                     Application.Quit();
                 }
-                Vector3 pos = player.PlayerFeetPosition + Vector3.up;
+                Vector3 pos = getVector3(spawnPos); // player.PlayerFeetPosition + Vector3.up;
                 SpawnHelper.Spawn(quickItem.Prefab, SpawnData.Default, null, pos, Quaternion.identity);
             }
         }
